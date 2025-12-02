@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Engineering Final Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .server-info {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #667eea;
+        }
+        
+        .server-info h2 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .label {
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .value {
+            color: #764ba2;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 10px 5px;
+            font-size: 0.9em;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">🚀</span> Cloud Engineering Project</h1>
+        <p class="subtitle">Load-Balanced Web Application on AWS</p>
+        
+        <div class="server-info">
+            <h2><span class="emoji">🖥️</span> Server Information</h2>
+            
+            <div class="info-item">
+                <span class="label">Private IP:</span>
+                <span class="value" id="private-ip">Loading...</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Hostname:</span>
+                <span class="value" id="hostname">Loading...</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Instance ID:</span>
+                <span class="value" id="instance-id">Loading...</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Availability Zone:</span>
+                <span class="value" id="az">Loading...</span>
+            </div>
+        </div>
+        
+        <div>
+            <span class="badge">⚖️ Load Balanced</span>
+            <span class="badge">🔄 Auto-Deployed</span>
+            <span class="badge">🔧 Ansible Automated</span>
+        </div>
+        
+        <div class="footer">
+            <p><strong>💡 Tip:</strong> Refresh this page multiple times to see different servers!</p>
+            <p>Deployed with ❤️ using AWS EC2, ALB, and Ansible</p>
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch instance metadata
+        async function fetchInstanceMetadata() {
+            const token = await fetch('http://169.254.169.254/latest/api/token', {
+                method: 'PUT',
+                headers: {
+                    'X-aws-ec2-metadata-token-ttl-seconds': '21600'
+                }
+            }).then(res => res.text()).catch(() => null);
+
+            const fetchMetadata = async (path) => {
+                const headers = token ? { 'X-aws-ec2-metadata-token': token } : {};
+                return fetch(`http://169.254.169.254/latest/meta-data/${path}`, { headers })
+                    .then(res => res.text())
+                    .catch(() => 'N/A');
+            };
+
+            const privateIp = await fetchMetadata('local-ipv4');
+            const hostname = await fetchMetadata('hostname');
+            const instanceId = await fetchMetadata('instance-id');
+            const az = await fetchMetadata('placement/availability-zone');
+
+            document.getElementById('private-ip').textContent = privateIp;
+            document.getElementById('hostname').textContent = hostname;
+            document.getElementById('instance-id').textContent = instanceId;
+            document.getElementById('az').textContent = az;
+        }
+
+        // Fetch metadata on page load
+        fetchInstanceMetadata();
+    </script>
+</body>
+</html>
