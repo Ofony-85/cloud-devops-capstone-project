@@ -88,6 +88,7 @@
             color: #764ba2;
             font-family: 'Courier New', monospace;
             font-weight: bold;
+            word-break: break-all;
         }
         
         .badge {
@@ -121,22 +122,22 @@
             
             <div class="info-item">
                 <span class="label">Private IP:</span>
-                <span class="value" id="private-ip">Loading...</span>
+                <span class="value" id="private-ip"><!--#echo var="SERVER_ADDR" --></span>
             </div>
             
             <div class="info-item">
                 <span class="label">Hostname:</span>
-                <span class="value" id="hostname">Loading...</span>
+                <span class="value" id="hostname"><!--#echo var="HOSTNAME" --></span>
             </div>
             
             <div class="info-item">
-                <span class="label">Instance ID:</span>
-                <span class="value" id="instance-id">Loading...</span>
+                <span class="label">Server Software:</span>
+                <span class="value" id="server-software"><!--#echo var="SERVER_SOFTWARE" --></span>
             </div>
             
             <div class="info-item">
-                <span class="label">Availability Zone:</span>
-                <span class="value" id="az">Loading...</span>
+                <span class="label">Request Time:</span>
+                <span class="value" id="request-time"><!--#echo var="DATE_LOCAL" --></span>
             </div>
         </div>
         
@@ -151,37 +152,5 @@
             <p>Deployed with ❤️ using AWS EC2, ALB, and Ansible</p>
         </div>
     </div>
-
-    <script>
-        // Function to fetch instance metadata
-        async function fetchInstanceMetadata() {
-            const token = await fetch('http://169.254.169.254/latest/api/token', {
-                method: 'PUT',
-                headers: {
-                    'X-aws-ec2-metadata-token-ttl-seconds': '21600'
-                }
-            }).then(res => res.text()).catch(() => null);
-
-            const fetchMetadata = async (path) => {
-                const headers = token ? { 'X-aws-ec2-metadata-token': token } : {};
-                return fetch(`http://169.254.169.254/latest/meta-data/${path}`, { headers })
-                    .then(res => res.text())
-                    .catch(() => 'N/A');
-            };
-
-            const privateIp = await fetchMetadata('local-ipv4');
-            const hostname = await fetchMetadata('hostname');
-            const instanceId = await fetchMetadata('instance-id');
-            const az = await fetchMetadata('placement/availability-zone');
-
-            document.getElementById('private-ip').textContent = privateIp;
-            document.getElementById('hostname').textContent = hostname;
-            document.getElementById('instance-id').textContent = instanceId;
-            document.getElementById('az').textContent = az;
-        }
-
-        // Fetch metadata on page load
-        fetchInstanceMetadata();
-    </script>
 </body>
 </html>
