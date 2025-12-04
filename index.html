@@ -117,29 +117,29 @@
         <h1><span class="emoji">🚀</span> Cloud Engineering Project</h1>
         <p class="subtitle">Load-Balanced Web Application on AWS</p>
         
-        <div class="server-info">
-            <h2><span class="emoji">🖥️</span> Server Information</h2>
-            
-            <div class="info-item">
-                <span class="label">Private IP:</span>
-                <span class="value" id="private-ip"><!--#echo var="SERVER_ADDR" --></span>
-            </div>
-            
-            <div class="info-item">
-                <span class="label">Hostname:</span>
-                <span class="value" id="hostname"><!--#echo var="HOSTNAME" --></span>
-            </div>
-            
-            <div class="info-item">
-                <span class="label">Server Software:</span>
-                <span class="value" id="server-software"><!--#echo var="SERVER_SOFTWARE" --></span>
-            </div>
-            
-            <div class="info-item">
-                <span class="label">Request Time:</span>
-                <span class="value" id="request-time"><!--#echo var="DATE_LOCAL" --></span>
-            </div>
-        </div>
+<div class="server-info">
+    <h2><span class="emoji">🖥️</span> Server Information</h2>
+    
+    <div class="info-item">
+        <span class="label">Private IP:</span>
+        <span class="value"><!--#echo var="SERVER_ADDR" --></span>
+    </div>
+    
+    <div class="info-item">
+        <span class="label">Hostname:</span>
+        <span class="value"><!--#echo var="HOSTNAME" --></span>
+    </div>
+    
+    <div class="info-item">
+        <span class="label">Server:</span>
+        <span class="value">NGINX on Ubuntu 24.04</span>
+    </div>
+    
+    <div class="info-item">
+        <span class="label">Request Time:</span>
+        <span class="value"><!--#echo var="DATE_LOCAL" --></span>
+    </div>
+</div>
         
         <div>
             <span class="badge">⚖️ Load Balanced</span>
