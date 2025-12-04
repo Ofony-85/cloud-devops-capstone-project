@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Engineering - S3 Static Hosting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        h1 {
+            color: #f5576c;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .server-info {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #f5576c;
+        }
+        
+        .server-info h2 {
+            color: #f5576c;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            font-size: 1.1em;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .label {
+            font-weight: bold;
+            color: #f5576c;
+        }
+        
+        .value {
+            color: #f093fb;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #f5576c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 10px 5px;
+            font-size: 0.9em;
+        }
+        
+        .comparison {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .comparison h3 {
+            color: #f5576c;
+            margin-bottom: 10px;
+        }
+        
+        .comparison ul {
+            list-style-position: inside;
+            color: #555;
+            line-height: 1.8;
+        }
+        
+        .comparison li {
+            margin: 8px 0;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="emoji">☁️</span> S3 Static Website Hosting</h1>
+        <p class="subtitle">Serverless, Scalable, and Cost-Effective</p>
+        
+        <div class="server-info">
+            <h2><span class="emoji">📦</span> Hosting Information</h2>
+            
+            <div class="info-item">
+                <span class="label">Hosting Type:</span>
+                <span class="value">Amazon S3 Static Website</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Storage Class:</span>
+                <span class="value">S3 Standard</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Region:</span>
+                <span class="value">US East (N. Virginia)</span>
+            </div>
+            
+            <div class="info-item">
+                <span class="label">Availability:</span>
+                <span class="value">99.99% SLA</span>
+            </div>
+        </div>
+        
+        <div>
+            <span class="badge">💰 Low Cost</span>
+            <span class="badge">⚡ High Performance</span>
+            <span class="badge">🔒 Secure</span>
+            <span class="badge">🌍 Global CDN Ready</span>
+        </div>
+        
+        <div class="comparison">
+            <h3>📊 S3 vs EC2 Hosting Comparison:</h3>
+            <ul>
+                <li><strong>S3:</strong> Serverless, no server management needed</li>
+                <li><strong>EC2:</strong> Full server control, can run dynamic applications</li>
+                <li><strong>S3:</strong> Pay only for storage and data transfer</li>
+                <li><strong>EC2:</strong> Pay for compute time (even when idle)</li>
+                <li><strong>S3:</strong> Automatic scaling, handles any traffic</li>
+                <li><strong>EC2:</strong> Manual scaling with load balancers</li>
+                <li><strong>S3:</strong> Only for static content (HTML, CSS, JS)</li>
+                <li><strong>EC2:</strong> Can run server-side code (PHP, Python, etc.)</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p><strong>✨ Fun Fact:</strong> This page is served from object storage, not a server!</p>
+            <p>Deployed with ❤️ using Amazon S3</p>
+        </div>
+    </div>
+</body>
+</html>

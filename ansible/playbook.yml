@@ -1,0 +1,120 @@
+---
+- name: Deploy NGINX Web Servers with Load Balancer Support
+  hosts: webservers
+  become: yes
+  
+  vars:
+    github_repo: "https://github.com/Ofony-85/cloud-devops-capstone-project.git"
+    web_root: "/var/www/html"
+  
+  tasks:
+    - name: Update apt package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+      tags: ['setup']
+
+    - name: Install required packages
+      apt:
+        name:
+          - nginx
+          - git
+          - curl
+        state: present
+      tags: ['setup']
+
+    - name: Ensure NGINX is enabled and started on boot
+      systemd:
+        name: nginx
+        enabled: yes
+        state: started
+      tags: ['nginx']
+
+    - name: Remove default NGINX welcome page
+      file:
+        path: "{{ web_root }}/index.nginx-debian.html"
+        state: absent
+      tags: ['deploy']
+
+    - name: Remove old website files
+      file:
+        path: /tmp/website
+        state: absent
+      tags: ['deploy']
+
+    - name: Clone website from GitHub repository
+      git:
+        repo: "{{ github_repo }}"
+        dest: /tmp/website
+        version: main
+        force: yes
+      tags: ['deploy']
+
+    - name: Copy website files to web root
+      copy:
+        src: /tmp/website/
+        dest: "{{ web_root }}/"
+        remote_src: yes
+        mode: '0644'
+      tags: ['deploy']
+
+    - name: Set correct ownership for web files
+      file:
+        path: "{{ web_root }}"
+        owner: www-data
+        group: www-data
+        recurse: yes
+      tags: ['deploy']
+
+    - name: Configure NGINX with SSI support
+      copy:
+        dest: /etc/nginx/sites-available/default
+        content: |
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+              
+              root {{ web_root }};
+              index index.html index.htm;
+              
+              server_name _;
+              
+              # Enable SSI (Server Side Includes)
+              ssi on;
+              
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+              
+              # Health check endpoint for ALB
+              location /health {
+                  access_log off;
+                  return 200 "healthy\n";
+                  add_header Content-Type text/plain;
+              }
+          }
+      notify: Restart NGINX
+      tags: ['nginx']
+
+    - name: Ensure NGINX configuration is valid
+      command: nginx -t
+      changed_when: false
+      tags: ['nginx']
+
+    - name: Force restart NGINX to apply changes
+      systemd:
+        name: nginx
+        state: restarted
+      tags: ['nginx']
+
+    - name: Clean up temporary files
+      file:
+        path: /tmp/website
+        state: absent
+      tags: ['deploy']
+
+  handlers:
+    - name: Restart NGINX
+      systemd:
+        name: nginx
+        state: restarted
